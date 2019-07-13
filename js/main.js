@@ -1,5 +1,8 @@
-var tileDimension = 32;
+var tileDimension = 64;
+var playerSpeed = 3;
 
+var actualTileDimension = 32;
+var tileScale = tileDimension / actualTileDimension;
 var playerCoord = [762 * tileDimension, 1249 * tileDimension];
 var tileWindowWidth = Math.ceil(window.innerWidth / tileDimension) + 3;
 var tileWindowHeight = Math.ceil(window.innerHeight / tileDimension) + 3;
@@ -8,6 +11,7 @@ var c;
 var ctx;
 
 var arrowsDown = [false, false, false, false]; //up, down, left, right
+var facingRight = false;
 var animationFrame = 0;
 
 function startGame()
@@ -29,7 +33,7 @@ function render()
 	
 	drawMapAt(Math.floor(playerCoord[0] / tileDimension), Math.floor(playerCoord[1] / tileDimension), tileDimension - (playerCoord[0] % tileDimension), tileDimension - (playerCoord[1] % tileDimension));
 	drawPlayer(animationFrame);
-	drawMinimap(window.innerWidth / 10, window.innerHeight / 10, Math.floor(playerCoord[0] / tileDimension), Math.floor(playerCoord[1] / tileDimension));
+	drawMinimap(window.innerWidth / 6, window.innerHeight / 6, Math.floor(playerCoord[0] / tileDimension), Math.floor(playerCoord[1] / tileDimension));
 }
 
 function updateWindowSize()
@@ -42,21 +46,23 @@ function updateWindowSize()
 
 function movePlayer()
 {
-	if(arrowsDown[0])
+	if(arrowsDown[0] && !buildingsAbove(Math.floor(playerCoord[0] / tileDimension), Math.floor(playerCoord[1] / tileDimension)))
 	{
-		playerCoord[1] -= 2;
+		playerCoord[1] -= playerSpeed;
 	}
-	if(arrowsDown[1])
+	if(arrowsDown[1] && !buildingsBelow(Math.floor(playerCoord[0] / tileDimension), Math.floor(playerCoord[1] / tileDimension)))
 	{
-		playerCoord[1] += 2;
+		playerCoord[1] += playerSpeed;
 	}
-	if(arrowsDown[2])
+	if(arrowsDown[2] && !buildingsToTheLeft(Math.floor(playerCoord[0] / tileDimension), Math.floor(playerCoord[1] / tileDimension)))
 	{
-		playerCoord[0] -= 2;
+		playerCoord[0] -= playerSpeed;
+		facingRight = false;
 	}
-	if(arrowsDown[3])
+	if(arrowsDown[3] && !buildingsToTheRight(Math.floor(playerCoord[0] / tileDimension), Math.floor(playerCoord[1] / tileDimension)))
 	{
-		playerCoord[0] += 2;
+		playerCoord[0] += playerSpeed;
+		facingRight = true;
 	}
 }
 
@@ -65,12 +71,21 @@ function drawPlayer()
 	var gait = 16
 	if(!arrowsDown.includes(true)) //Standing still
 	{
-		ctx.drawImage(sprites.cyStand, window.innerWidth / 2, window.innerHeight / 2);
+		if(facingRight) ctx.drawImage(sprites.cyStand, window.innerWidth / 2, window.innerHeight / 2, tileDimension, tileDimension);
+		else ctx.drawImage(sprites.cyStandL, window.innerWidth / 2, window.innerHeight / 2, tileDimension, tileDimension);
 	}
 	else
 	{
-		if(animationFrame % gait < gait / 2) ctx.drawImage(sprites.cyWalk, window.innerWidth / 2, window.innerHeight / 2);
-		else ctx.drawImage(sprites.cyStand, window.innerWidth / 2, window.innerHeight / 2);
+		if(facingRight)
+		{
+			if(animationFrame % gait < gait / 2) ctx.drawImage(sprites.cyWalk, window.innerWidth / 2, window.innerHeight / 2, tileDimension, tileDimension);
+			else ctx.drawImage(sprites.cyStand, window.innerWidth / 2, window.innerHeight / 2, tileDimension, tileDimension);
+		}
+		else
+		{
+			if(animationFrame % gait < gait / 2) ctx.drawImage(sprites.cyWalkL, window.innerWidth / 2, window.innerHeight / 2, tileDimension, tileDimension);
+			else ctx.drawImage(sprites.cyStandL, window.innerWidth / 2, window.innerHeight / 2, tileDimension, tileDimension);
+		}
 	}
 }
 
@@ -87,11 +102,15 @@ function drawMapAt(x, y, offsetX, offsetY)
 			var tileY = y - Math.floor(tileWindowHeight / 2) + row;
 			if(!getTileAt(tileX, tileY))
 			{
-				ctx.drawImage(grass(getTilesSurrounding(tileX, tileY)), upperLeft[0] + tileDimension * col, upperLeft[1] + tileDimension * row);
+				ctx.drawImage(grass(getTilesSurrounding(tileX, tileY)), upperLeft[0] + tileDimension * col, upperLeft[1] + tileDimension * row, tileDimension, tileDimension);
 			}
 			else
 			{
-				ctx.drawImage(sprites.road, upperLeft[0] + tileDimension * col, upperLeft[1] + tileDimension * row);
+				ctx.drawImage(sprites.road, upperLeft[0] + tileDimension * col, upperLeft[1] + tileDimension * row, tileDimension, tileDimension);
+			}
+			if(getBuildingAt(tileX, tileY))
+			{
+				ctx.drawImage(brick(getBuildingsSurrounding(tileX, tileY)), upperLeft[0] + tileDimension * col, upperLeft[1] + tileDimension * row, tileDimension, tileDimension);
 			}
 		}
 	}
@@ -99,23 +118,58 @@ function drawMapAt(x, y, offsetX, offsetY)
 
 function drawMinimap(width, height, x, y)
 {
+	width = Math.floor(width);
+	height = Math.floor(height);
 	var upperLeft = [window.innerWidth - width, 0];
 	ctx.fillStyle = ('#ffffff');
 	ctx.globalAlpha = 0.2;
     ctx.fillRect(upperLeft[0], upperLeft[1], width, height);
     ctx.globalAlpha = 1.0;
 	ctx.fillStyle = ('#000000');
-	ctx.strokeStyle = ('#000000');
-	ctx.lineWidth = 2;
-    ctx.strokeRect(upperLeft[0], upperLeft[1], width, height);
+	//ctx.strokeStyle = ('#000000');
+	//ctx.lineWidth = 2;
+    //ctx.strokeRect(upperLeft[0], upperLeft[1], width, height);
 	
+	ctx.drawImage(sprites.map, x - Math.floor(width / 2), y - Math.floor(height / 2), width, height, upperLeft[0], upperLeft[1], width, height);
+	ctx.drawImage(sprites.buildings, x - Math.floor(width / 2), y - Math.floor(height / 2), width, height, upperLeft[0], upperLeft[1], width, height);
+	ctx.beginPath();
+	ctx.arc(upperLeft[0] + Math.floor(width / 2), upperLeft[1] + Math.floor(height / 2), 3, 0, 2 * Math.PI, false);
+	ctx.fillStyle = '#C8102E';
+	ctx.fill();
+	ctx.lineWidth = 1;
+	ctx.strokeStyle = '#F1BE48';
+	ctx.stroke();
+	//console.log("sx: " + (x - Math.floor(width / 2)) + "  sy: " + (y - Math.floor(height / 2)) + "  sw: " + width + "  sh: " + height + "  x: " + (upperLeft[0] - x + Math.floor(width / 2)) + "  y: " + (upperLeft[1] - y + Math.floor(height / 2)) + "  w: " + width + "  h: " + height);
+	/*
 	for(var row = 0; row < height; row++)
 	{
 		for(var col = 0; col < width; col++)
 		{
-			if(getTileAt(x + col - Math.floor(width / 2), y + row - Math.floor(height / 2))) ctx.fillRect(upperLeft[0] + col, upperLeft[1] + row, 1, 1);
+			if(getTileAt(x + col - Math.floor(width / 2), y + row - Math.floor(height / 2))) ctx.drawImage(sprites.pixel, upperLeft[0] + col, upperLeft[1] + row);//ctx.fillRect(upperLeft[0] + col, upperLeft[1] + row, 1, 1);
 		}
 	}
+	*/
+}
+
+
+function buildingsToTheRight(x, y)
+{
+	return(getBuildingAt(x + 1, y) || getBuildingAt(x + 1, y - 1) || getBuildingAt(x + 1, y + 1));
+}
+
+function buildingsToTheLeft(x, y)
+{
+	return(getBuildingAt(x - 1, y) || getBuildingAt(x - 1, y - 1) || getBuildingAt(x - 1, y + 1));
+}
+
+function buildingsAbove(x, y)
+{
+	return(getBuildingAt(x, y - 1) || getBuildingAt(x + 1, y - 1) || getBuildingAt(x - 1, y - 1));
+}
+
+function buildingsBelow(x, y)
+{
+	return(getBuildingAt(x, y + 1) || getBuildingAt(x + 1, y + 1) || getBuildingAt(x - 1, y + 1));
 }
 
 function getText(url){
@@ -154,10 +208,16 @@ class Sprites
 	constructor() {}
 	get cyWalk() { return document.getElementById("cyWalk"); }
 	get cyStand() { return document.getElementById("cyStand"); }
+	get cyWalkL() { return document.getElementById("cyWalkL"); }
+	get cyStandL() { return document.getElementById("cyStandL"); }
 	get road() { return document.getElementById("road"); }
+	get pixel() { return document.getElementById("pixel"); }
+	get map() { return document.getElementById("map"); }
+	get buildings() { return document.getElementById("buildings"); }
 }
 
 function grass(string) { return document.getElementById("grass" + string); }
+function brick(string) { return document.getElementById("brick" + string); }
 function dirt(string) { return document.getElementById("dirt" + string); }
 
 const sprites = new Sprites();
