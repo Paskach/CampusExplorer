@@ -11,6 +11,8 @@ var c;
 var ctx;
 
 var arrowsDown = [false, false, false, false]; //up, down, left, right
+var mousePosition = [0, 0];
+var isMouseDown = false;
 var facingRight = false;
 var animationFrame = 0;
 
@@ -34,6 +36,7 @@ function render()
 	drawMapAt(Math.floor(playerCoord[0] / tileDimension), Math.floor(playerCoord[1] / tileDimension), tileDimension - (playerCoord[0] % tileDimension), tileDimension - (playerCoord[1] % tileDimension));
 	drawPlayer(animationFrame);
 	drawMinimap(window.innerWidth / 6, window.innerHeight / 6, Math.floor(playerCoord[0] / tileDimension), Math.floor(playerCoord[1] / tileDimension));
+	drawJoystick(Math.floor(window.innerWidth / 2), window.innerHeight - 150, mousePosition[0], mousePosition[1]);
 }
 
 function updateWindowSize()
@@ -151,6 +154,65 @@ function drawMinimap(width, height, x, y)
 	*/
 }
 
+function drawJoystick(joyx, joyy, dirx, diry)
+{
+	var largeR = 75;
+	var littleR = 25;
+	var k = largeR - littleR;
+	ctx.globalAlpha = 0.2;
+	ctx.beginPath();
+	ctx.arc(joyx, joyy, largeR, 0, 2 * Math.PI, false);
+	ctx.fillStyle = '#ffffff';
+	ctx.fill();
+	ctx.lineWidth = 4;
+	ctx.strokeStyle = '#ffffff';
+	ctx.stroke();
+	
+	var stickX;
+	var stickY;
+	var theta = (Math.round((Math.atan((diry - joyy) / (dirx - joyx)) * (180 / Math.PI)) / 45) * 45) * (Math.PI / 180);
+		
+	if(isMouseDown)
+	{
+		stickX = k * Math.cos(theta) * (dirx < joyx ? -1 : 1) + joyx;
+		stickY = k * Math.sin(theta) * (dirx < joyx ? -1 : 1) + joyy;
+	}
+	else
+	{
+		stickX = joyx;
+		stickY = joyy;
+	}
+	
+	ctx.beginPath();
+	ctx.arc(stickX, stickY, littleR, 0, 2 * Math.PI, false);
+	arrowsDown[0] = stickY < joyy;
+	arrowsDown[1] = stickY > joyy;
+	arrowsDown[2] = stickX < joyx;
+	arrowsDown[3] = stickX > joyx;
+	ctx.fillStyle = '#ffffff';
+	ctx.fill();
+	ctx.lineWidth = 4;
+	ctx.strokeStyle = '#ffffff';
+	ctx.stroke();
+	
+	ctx.globalAlpha = 1;
+}
+
+function updateMouseCoords(e)
+{
+	mousePosition[0] = e.clientX;
+	mousePosition[1] = e.clientY;
+}
+
+function mouseDown(e)
+{
+	isMouseDown = true;
+}
+
+function mouseUp(e)
+{
+	isMouseDown = false;
+}
 
 function buildingsToTheRight(x, y)
 {
