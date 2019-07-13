@@ -18,6 +18,9 @@ var animationFrame = 0;
 
 function startGame()
 {
+	window.addEventListener('touchstart', process_touchstart, false);
+	window.addEventListener('touchmove', process_touchmove, false);
+	window.addEventListener('touchend', process_touchend, false);
 	c = document.getElementById('canvas');
 	ctx = c.getContext("2d");
 	(function animloop(){
@@ -204,12 +207,32 @@ function updateMouseCoords(e)
 	mousePosition[1] = e.clientY;
 }
 
+function process_touchmove(e)
+{
+	e.preventDefault();
+	mousePosition[0] = e.changedTouches[0].pageX;
+	mousePosition[1] = e.changedTouches[0].pageY;
+}
+
 function mouseDown(e)
 {
 	isMouseDown = true;
 }
 
 function mouseUp(e)
+{
+	isMouseDown = false;
+}
+
+function process_touchstart(e)
+{
+	isMouseDown = true;
+	e.preventDefault();
+	mousePosition[0] = e.changedTouches[0].pageX;
+	mousePosition[1] = e.changedTouches[0].pageY;
+}
+
+function process_touchend(e)
 {
 	isMouseDown = false;
 }

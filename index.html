@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -56,62 +55,3 @@
     <canvas id="canvas" onmousemove="updateMouseCoords(event)" onmousedown="mouseDown(event)" onmouseup="mouseUp(event)"></canvas>
   </body>
 </html>
-=======
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Campus Explorer</title>
-    <script src="js/main.js" charset="utf-8"></script>
-    <script src="js/map.js" charset="utf-8"></script>
-    <script src="js/buildings.js" charset="utf-8"></script>
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-	
-	<img id="cyStand" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/cyStand.png">
-	<img id="cyWalk" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/cyWalk.png">
-	<img id="cyStandL" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/cyStandL.png">
-	<img id="cyWalkL" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/cyWalkL.png">
-	<img id="pixel" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/blackPixel.png">
-	<img id="map" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/map.png">
-	<img id="buildings" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/buildings.png">
-	<img id="grass0000" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/ground/0000.png">
-	<img id="grass0001" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/ground/0001.png">
-	<img id="grass0010" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/ground/0010.png">
-	<img id="grass0011" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/ground/0011.png">
-	<img id="grass0100" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/ground/0100.png">
-	<img id="grass0101" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/ground/0101.png">
-	<img id="grass0110" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/ground/0110.png">
-	<img id="grass0111" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/ground/0111.png">
-	<img id="grass1000" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/ground/1000.png">
-	<img id="grass1001" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/ground/1001.png">
-	<img id="grass1010" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/ground/1010.png">
-	<img id="grass1011" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/ground/1011.png">
-	<img id="grass1100" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/ground/1100.png">
-	<img id="grass1101" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/ground/1101.png">
-	<img id="grass1110" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/ground/1110.png">
-	<img id="grass1111" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/ground/1111.png">
-	
-	<img id="brick0000" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/buildings/brick0000.png">
-	<img id="brick0001" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/buildings/brick0001.png">
-	<img id="brick0010" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/buildings/brick0010.png">
-	<img id="brick0011" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/buildings/brick0011.png">
-	<img id="brick0100" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/buildings/brick0100.png">
-	<img id="brick0101" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/buildings/brick0101.png">
-	<img id="brick0110" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/buildings/brick0110.png">
-	<img id="brick0111" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/buildings/brick0111.png">
-	<img id="brick1000" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/buildings/brick1000.png">
-	<img id="brick1001" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/buildings/brick1001.png">
-	<img id="brick1010" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/buildings/brick1010.png">
-	<img id="brick1011" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/buildings/brick1011.png">
-	<img id="brick1100" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/buildings/brick1100.png">
-	<img id="brick1101" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/buildings/brick1101.png">
-	<img id="brick1110" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/buildings/brick1110.png">
-	<img id="brick1111" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/buildings/brick1111.png">
-	<img id="road" src="https://raw.githubusercontent.com/Paskach/CampusExplorer/master/sprites/ground/road.png">
-	
-  </head>
-  <body onload="startGame()">
-    <canvas id="canvas"></canvas>
-  </body>
-</html>
->>>>>>> 8612a7f0b3291afeb71ebfb2403c230cbbbba99c
