@@ -37,6 +37,7 @@ function render()
 	movePlayer();
 	
 	drawMapAt(Math.floor(playerCoord[0] / tileDimension), Math.floor(playerCoord[1] / tileDimension), tileDimension - (playerCoord[0] % tileDimension), tileDimension - (playerCoord[1] % tileDimension));
+	drawItems();
 	drawPlayer(animationFrame);
 	drawMinimap(window.innerWidth / 6, window.innerHeight / 6, Math.floor(playerCoord[0] / tileDimension), Math.floor(playerCoord[1] / tileDimension));
 	drawJoystick(Math.floor(window.innerWidth / 2), window.innerHeight - 150, mousePosition[0], mousePosition[1]);
@@ -120,6 +121,26 @@ function drawMapAt(x, y, offsetX, offsetY)
 			}
 		}
 	}
+}
+
+function drawItems()
+{
+	for(var i = 0; i < items.length; i += 2)
+	{
+		drawGlintAt(items[i + 1][0], items[i + 1][1], tileDimension - (playerCoord[0] % tileDimension), tileDimension - (playerCoord[1] % tileDimension));
+	}
+}
+
+function drawGlintAt(x, y, offsetX, offsetY)
+{
+	//var upperLeft = [- 2 * tileDimension + offsetX + (Math.floor(window.innerWidth / 2) % tileDimension) - Math.ceil(tileWindowWidth / 2), - 2 * tileDimension + offsetY + (Math.floor(window.innerHeight / 2) % tileDimension) - Math.ceil(tileWindowHeight / 2)];
+	var glintFrame = -1
+	if(animationFrame > 0 && animationFrame <= 3) glintFrame = 1;
+	if(animationFrame > 3 && animationFrame <= 6) glintFrame = 2;
+	if(animationFrame > 6 && animationFrame <= 9) glintFrame = 3;
+	if(animationFrame > 9 && animationFrame <= 12) glintFrame = 2;
+	if(animationFrame > 12 && animationFrame <= 15) glintFrame = 1;
+	if(glintFrame > 0) ctx.drawImage(glint(glintFrame), Math.floor(window.innerWidth / 2) - playerCoord[0] + (x * tileDimension), Math.floor(window.innerHeight / 2) - playerCoord[1] + (y * tileDimension), tileDimension, tileDimension)
 }
 
 function drawMinimap(width, height, x, y)
@@ -304,6 +325,7 @@ class Sprites
 function grass(string) { return document.getElementById("grass" + string); }
 function brick(string) { return document.getElementById("brick" + string); }
 function dirt(string) { return document.getElementById("dirt" + string); }
+function glint(string) { return document.getElementById("glint" + string); }
 
 const sprites = new Sprites();
 
@@ -315,3 +337,12 @@ window.requestAnimFrame = (function(){
             window.setTimeout(callback, 1000 / 60);
           };
 })();
+
+var items = [
+	"the White Poker Chip",		[283, 466], 	"It's covered in dirt",
+	"the Red Poker Chip", 		[300, 378],		"Looks like this has been here for years",
+	"the Gold Poker Chip",		[200, 547],		"It's lodged in the ground",
+	"a Piece of Chalk", 		[546, 937],		"Helpful for writing opinions on the ground",
+	"the Audition Piece", 		[600, 1210],	"'Haydn Trumpet Concerto III'",
+	"the Frisbee", 				[240, 1370],	"Looks brand new"
+];
