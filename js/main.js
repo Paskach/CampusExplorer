@@ -367,8 +367,9 @@ function setCookie(cname, cvalue, exdays) {
   var d = new Date();
   d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
   var expires = "expires="+d.toUTCString();
+  console.log(cname + " before: " + cvalue);
   document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-  console.log(cname + ": " + cvalue);
+  console.log(cname + " after : " + cvalue);
 }
 
 function getCookie(cname) {
