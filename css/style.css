@@ -8,3 +8,8 @@ html, body {
   margin: 0;
   overflow: hidden;
 }
+
+@font-face {
+    font-family: pixel;
+    src: url('fonts/8-Bit_Madness.ttf');
+}

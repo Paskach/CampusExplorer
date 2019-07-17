@@ -23,6 +23,7 @@ function startGame()
 	window.addEventListener('touchend', process_touchend, false);
 	c = document.getElementById('canvas');
 	ctx = c.getContext("2d");
+	ctx.font = '16px pixel';
 	(function animloop(){
 		requestAnimFrame(animloop);
 		render();
@@ -41,6 +42,7 @@ function render()
 	drawPlayer(animationFrame);
 	drawMinimap(window.innerWidth / 6, window.innerHeight / 6, Math.floor(playerCoord[0] / tileDimension), Math.floor(playerCoord[1] / tileDimension));
 	drawJoystick(Math.floor(window.innerWidth / 2), window.innerHeight - 150, mousePosition[0], mousePosition[1]);
+	ctx.fillText('Testing 123', 10, 10);
 }
 
 function updateWindowSize()
@@ -209,10 +211,13 @@ function drawJoystick(joyx, joyy, dirx, diry)
 	
 	ctx.beginPath();
 	ctx.arc(stickX, stickY, littleR, 0, 2 * Math.PI, false);
-	arrowsDown[0] = stickY < joyy;
-	arrowsDown[1] = stickY > joyy;
-	arrowsDown[2] = stickX < joyx;
-	arrowsDown[3] = stickX > joyx;
+	if(isMouseDown)
+	{
+		arrowsDown[0] = stickY < joyy;
+		arrowsDown[1] = stickY > joyy;
+		arrowsDown[2] = stickX < joyx;
+		arrowsDown[3] = stickX > joyx;
+	}
 	ctx.fillStyle = '#ffffff';
 	ctx.fill();
 	ctx.lineWidth = 4;
@@ -243,6 +248,10 @@ function mouseDown(e)
 function mouseUp(e)
 {
 	isMouseDown = false;
+	arrowsDown[0] = false;
+	arrowsDown[1] = false;
+	arrowsDown[2] = false;
+	arrowsDown[3] = false;
 }
 
 function process_touchstart(e)
@@ -295,6 +304,8 @@ function getText(url){
 
 window.onkeydown = function(e)
 {
+	console.log("keydown");
+	e.preventDefault();
 	if(e.which == 38) arrowsDown[0] = true;
 	if(e.which == 40) arrowsDown[1] = true;
 	if(e.which == 37) arrowsDown[2] = true;
@@ -303,6 +314,7 @@ window.onkeydown = function(e)
 
 window.onkeyup = function(e)
 {
+	console.log("keyup");
 	if(e.which == 38) arrowsDown[0] = false;
 	if(e.which == 40) arrowsDown[1] = false;
 	if(e.which == 37) arrowsDown[2] = false;
