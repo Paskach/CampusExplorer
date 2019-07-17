@@ -1,9 +1,10 @@
 var tileDimension = 64;
-var playerSpeed = 3;
+var playerSpeed = 10;
 
 var actualTileDimension = 32;
 var tileScale = tileDimension / actualTileDimension;
 var playerCoord = [762 * tileDimension, 1249 * tileDimension];
+var foundItems = "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
 var tileWindowWidth = Math.ceil(window.innerWidth / tileDimension) + 3;
 var tileWindowHeight = Math.ceil(window.innerHeight / tileDimension) + 3;
 
@@ -23,7 +24,7 @@ function startGame()
 	window.addEventListener('touchend', process_touchend, false);
 	c = document.getElementById('canvas');
 	ctx = c.getContext("2d");
-	ctx.font = '16px pixel';
+	checkCookie();
 	(function animloop(){
 		requestAnimFrame(animloop);
 		render();
@@ -34,6 +35,8 @@ function render()
 {
 	updateWindowSize();
 	ctx.imageSmoothingEnabled = false;
+	ctx.font = '32px Madness';
+	console.log(ctx.font);
 	animationFrame = (animationFrame + 1) % 128;
 	movePlayer();
 	
@@ -95,6 +98,8 @@ function drawPlayer()
 			if(animationFrame % gait < gait / 2) ctx.drawImage(sprites.cyWalkL, window.innerWidth / 2, window.innerHeight / 2, tileDimension, tileDimension);
 			else ctx.drawImage(sprites.cyStandL, window.innerWidth / 2, window.innerHeight / 2, tileDimension, tileDimension);
 		}
+		setCookie("playerX", playerCoord[0], 365);
+		setCookie("playerY", playerCoord[1], 365);
 	}
 }
 
@@ -127,7 +132,7 @@ function drawMapAt(x, y, offsetX, offsetY)
 
 function drawItems()
 {
-	for(var i = 0; i < items.length; i += 2)
+	for(var i = 0; i < items.length; i += 3)
 	{
 		drawGlintAt(items[i + 1][0], items[i + 1][1], tileDimension - (playerCoord[0] % tileDimension), tileDimension - (playerCoord[1] % tileDimension));
 	}
@@ -358,3 +363,38 @@ var items = [
 	"the Audition Piece", 		[600, 1210],	"'Haydn Trumpet Concerto III'",
 	"the Frisbee", 				[240, 1370],	"Looks brand new"
 ];
+
+function setCookie(cname, cvalue, exdays) {
+  var d = new Date();
+  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+  var expires = "expires="+d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+  var name = cname + "=";
+  var ca = document.cookie.split(';');
+  for(var i = 0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+function checkCookie() {
+  var data = getCookie("data");
+  if (data != "") {
+	  playerCoord[0] = getCookie("playerX");
+	  playerCoord[1] = getCookie("playerY");
+	  foundItems = getCookie("data");
+  } else {
+	  setCookie("data", foundItems, 365);
+	  setCookie("playerX", playerCoord[0], 365);
+	  setCookie("playerY", playerCoord[1], 365);
+  }
+}

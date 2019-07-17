@@ -10,6 +10,14 @@ html, body {
 }
 
 @font-face {
-    font-family: pixel;
-    src: url('fonts/8-Bit_Madness.ttf');
+  font-family: "Madness";
+  src: url("./fonts/Madness.eot"); /* IE9 Compat Modes */
+  src: url("./fonts/Madness.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
+    url("./fonts/Madness.otf") format("opentype"), /* Open Type Font */
+    url("./fonts/Madness.svg") format("svg"), /* Legacy iOS */
+    url("./fonts/Madness.ttf") format("truetype"), /* Safari, Android, iOS */
+    url("./fonts/Madness.woff") format("woff"), /* Modern Browsers */
+    url("./fonts/Madness.woff2") format("woff2"); /* Modern Browsers */
+  font-weight: normal;
+  font-style: normal;
 }
