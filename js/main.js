@@ -25,6 +25,7 @@ function startGame()
 	c = document.getElementById('canvas');
 	ctx = c.getContext("2d");
 	checkCookie();
+	console.log("X: " + playerCoord[0] + "  Y: " + playerCoord[1])'
 	(function animloop(){
 		requestAnimFrame(animloop);
 		render();
