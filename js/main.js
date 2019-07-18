@@ -166,8 +166,9 @@ function drawMinimap(width, height, x, y)
 	//ctx.lineWidth = 2;
     //ctx.strokeRect(upperLeft[0], upperLeft[1], width, height);
 	
-	ctx.drawImage(sprites.map, x - Math.floor(width / 2), y - Math.floor(height / 2), width, height, upperLeft[0], upperLeft[1], width, height);
-	ctx.drawImage(sprites.buildings, x - Math.floor(width / 2), y - Math.floor(height / 2), width, height, upperLeft[0], upperLeft[1], width, height);
+	var zoomOut = 2;
+	ctx.drawImage(sprites.map, x - Math.floor(width / 2) * zoomOut, y - Math.floor(height / 2) * zoomOut, width * zoomOut, height * zoomOut, upperLeft[0], upperLeft[1], width, height);
+	ctx.drawImage(sprites.buildings, x - Math.floor(width / 2) * zoomOut, y - Math.floor(height / 2) * zoomOut, width * zoomOut, height * zoomOut, upperLeft[0], upperLeft[1], width, height);
 	ctx.beginPath();
 	ctx.arc(upperLeft[0] + Math.floor(width / 2), upperLeft[1] + Math.floor(height / 2), 3, 0, 2 * Math.PI, false);
 	ctx.fillStyle = '#C8102E';
