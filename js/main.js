@@ -392,8 +392,8 @@ function getCookie(cname) {
 function checkCookie() {
   var data = getCookie("data");
   if (data != "") {
-	  playerCoord[0] = getCookie("playerX");
-	  playerCoord[1] = getCookie("playerY");
+	  playerCoord[0] = parseInt(getCookie("playerX"));
+	  playerCoord[1] = parseInt(getCookie("playerY"));
 	  foundItems = getCookie("data");
   } else {
 	  setCookie("data", foundItems, 365);
