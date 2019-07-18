@@ -1,5 +1,5 @@
 var tileDimension = 64;
-var playerSpeed = 10;
+var playerSpeed = 4;
 
 var actualTileDimension = 32;
 var tileScale = tileDimension / actualTileDimension;
