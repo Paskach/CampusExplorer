@@ -42,11 +42,12 @@ function render()
 	
 	drawMapAt(Math.floor(playerCoord[0] / tileDimension), Math.floor(playerCoord[1] / tileDimension), tileDimension - (playerCoord[0] % tileDimension), tileDimension - (playerCoord[1] % tileDimension));
 	drawItems();
-	console.log("X: " + playerCoord[0] + "  Y: " + playerCoord[1]);
+	//console.log("X: " + playerCoord[0] + "  Y: " + playerCoord[1]);
 	drawPlayer(animationFrame);
 	drawMinimap(window.innerWidth / 6, window.innerHeight / 6, Math.floor(playerCoord[0] / tileDimension), Math.floor(playerCoord[1] / tileDimension));
 	drawJoystick(Math.floor(window.innerWidth / 2), window.innerHeight - 150, mousePosition[0], mousePosition[1]);
-	ctx.fillText('Testing 123', 10, 10);
+	//ctx.fillText('Testing 123', 10, 10);
+	checkItems();
 }
 
 function updateWindowSize()
@@ -233,6 +234,35 @@ function drawJoystick(joyx, joyy, dirx, diry)
 	ctx.globalAlpha = 1;
 }
 
+function checkItems()
+{
+	for(var i = 0; i < items.length; i += 3)
+	{
+		var distance = Math.max(Math.abs(items[i + 1][0] - (playerCoord[0] / tileDimension)), Math.abs(items[i + 1][1] - (playerCoord[1] / tileDimension)));
+		var windowUpperLeft = [Math.floor(window.innerWidth / 2 - sprites.message.width / 2 * tileScale), Math.floor(window.innerHeight / 2 - sprites.message.height / 2 * tileScale)];
+		if(Math.abs(distance) < 1)
+		{
+			ctx.globalAlpha = 0.75;
+			ctx.drawImage(sprites.message, windowUpperLeft[0], windowUpperLeft[1], sprites.message.width * tileScale, sprites.message.height * tileScale);
+			ctx.globalAlpha = 1;
+			ctx.drawImage(document.getElementById(items[i]), windowUpperLeft[0] + 16, windowUpperLeft[1] + 64, tileDimension, tileDimension);
+			ctx.fillText("YOU FOUND", windowUpperLeft[0] + 96, windowUpperLeft[1] + 32);
+			ctx.fillText(items[i].toUpperCase() + '!', windowUpperLeft[0] + 96, windowUpperLeft[1] + 64);
+			var desc = items[i + 2].split('|');
+			for(var j = 0; j < desc.length; j++)
+			{
+				ctx.fillText(desc[j], windowUpperLeft[0] + 96, windowUpperLeft[1] + 96 + 32 * j);
+			}
+		}
+	}
+}
+
+
+
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//@@@  Support functions  @@@
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
 function updateMouseCoords(e)
 {
 	mousePosition[0] = e.clientX;
@@ -297,24 +327,9 @@ function buildingsBelow(x, y)
 	return(getBuildingAt(x, y + 1) || getBuildingAt(x + 1, y + 1) || getBuildingAt(x - 1, y + 1));
 }
 
-function getText(url){
-    // read text from URL location
-    var request = new XMLHttpRequest();
-    request.open('GET', url, true);
-    request.send(null);
-    request.onreadystatechange = function () {
-        if (request.readyState === 4 && request.status === 200) {
-            var type = request.getResponseHeader('Content-Type');
-            if (type.indexOf("text") !== 1) {
-                return request.responseText;
-            }
-        }
-    }
-}
-
 window.onkeydown = function(e)
 {
-	console.log("keydown");
+	//console.log("keydown");
 	e.preventDefault();
 	if(e.which == 38) arrowsDown[0] = true;
 	if(e.which == 40) arrowsDown[1] = true;
@@ -324,7 +339,7 @@ window.onkeydown = function(e)
 
 window.onkeyup = function(e)
 {
-	console.log("keyup");
+	//console.log("keyup");
 	if(e.which == 38) arrowsDown[0] = false;
 	if(e.which == 40) arrowsDown[1] = false;
 	if(e.which == 37) arrowsDown[2] = false;
@@ -342,6 +357,7 @@ class Sprites
 	get pixel() { return document.getElementById("pixel"); }
 	get map() { return document.getElementById("map"); }
 	get buildings() { return document.getElementById("buildings"); }
+	get message() { return document.getElementById("messageBox"); }
 }
 
 function grass(string) { return document.getElementById("grass" + string); }
@@ -361,21 +377,21 @@ window.requestAnimFrame = (function(){
 })();
 
 var items = [
-	"the White Poker Chip",		[283, 466], 	"It's covered in dirt",
-	"the Red Poker Chip", 		[300, 378],		"Looks like this has been here for years",
-	"the Gold Poker Chip",		[200, 547],		"It's lodged in the ground",
-	"a Piece of Chalk", 		[546, 937],		"Helpful for writing opinions on the ground",
-	"the Audition Piece", 		[600, 1210],	"'Haydn Trumpet Concerto III'",
-	"the Frisbee", 				[240, 1370],	"Looks brand new"
+	"White Poker Chip",		[283, 466], 	"It's covered in |dirt",
+	"Red Poker Chip", 		[300, 378],		"Looks like this has |been here for years",
+	"Gold Poker Chip",		[200, 547],		"It's lodged in the |ground",
+	"Piece of Chalk", 		[546, 937],		"Helpful for writing |opinions on the |ground",
+	"Audition Piece", 		[600, 1210],	"'Haydn Trumpet |Concerto III'",
+	"Frisbee", 				[240, 1370],	"Looks brand new"
 ];
 
 function setCookie(cname, cvalue, exdays) {
   var d = new Date();
   d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
   var expires = "expires="+d.toUTCString();
-  console.log(cname + " before: " + cvalue);
+  //console.log(cname + " before: " + cvalue);
   document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-  console.log(cname + " after : " + cvalue);
+  //console.log(cname + " after : " + cvalue);
 }
 
 function getCookie(cname) {
