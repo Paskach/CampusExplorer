@@ -271,6 +271,10 @@ function process_touchstart(e)
 function process_touchend(e)
 {
 	isMouseDown = false;
+	arrowsDown[0] = false;
+	arrowsDown[1] = false;
+	arrowsDown[2] = false;
+	arrowsDown[3] = false;
 }
 
 function buildingsToTheRight(x, y)
