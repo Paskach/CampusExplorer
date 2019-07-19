@@ -383,7 +383,16 @@ var items = [
 	"Gold Poker Chip",		[200, 547],		"It's lodged in the |ground",
 	"Piece of Chalk", 		[546, 937],		"Helpful for writing |opinions on the |ground",
 	"Audition Piece", 		[600, 1210],	"'Haydn Trumpet |Concerto III'",
-	"Frisbee", 				[240, 1370],	"Looks brand new"
+	"Frisbee", 				[240, 1370],	"Looks brand new",
+	"Banana", 				[368, 1174],	"Brown and mushy",
+	"Game Controller", 		[1321, 1378], 	"Looks like it was |thrown out a window",
+	"Corn", 				[1048, 655],	"Probably came from|this building",
+	"Dual Triode", 			[656, 791], 	"Probably could solve|some simultaneous|linear equations",
+	"Fork", 				[1316, 1289], 	"Don't see many of|these around here",
+	"Frog", 				[1333, 2669], 	"'Ribbit'",
+	"Pink Slip", 			[520, 1204], 	"'Drop: Calc 166'",
+	"Solar Panel", 			[678, 615], 	"Hey, you could power|a car with this!",
+	"Swan Feather", 		[673, 1278], 	"From Lancelot or|Elaine?"
 ];
 
 function setCookie(cname, cvalue, exdays) {
